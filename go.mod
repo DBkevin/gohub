@@ -11,6 +11,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.6
 	github.com/redis/go-redis/v9 v9.0.4
 	github.com/spf13/cast v1.6.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	github.com/thedevsaddam/govalidator v1.9.10
 	github.com/ulule/limiter/v3 v3.11.2
@@ -40,6 +41,7 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
