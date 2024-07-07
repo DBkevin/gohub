@@ -29,6 +29,7 @@ func runMakeAPIController(cmd *cobra.Command, args []string) {
 	model.PackageName = apiVersion
 	// 组建目标目录
 	filepath := fmt.Sprintf("app/http/controllers/api/%s/%s_controller.go", apiVersion, model.TableName)
+	versionStr := map[string]string{"apiVersion": apiVersion}
 	// 基于模板创建文件（做好变量替换）
-	createFileFromStub(filepath, "apicontroller", model)
+	createFileFromStub(filepath, "apicontroller", model, versionStr)
 }
