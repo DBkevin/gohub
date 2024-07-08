@@ -6,6 +6,8 @@ import (
 	"gohub/app/http/middlewares"
 	"net/http"
 
+	controllers "gohub/app/http/controllers/api/v1"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -46,32 +48,10 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/verify-codes/email", middlewares.LimitPerRoute("20-H"), vcc.SendUsingEmail)
 			// 图片验证码
 			authGroup.POST("/verify-codes/captcha", middlewares.LimitPerRoute("50-H"), vcc.ShowCaptcha)
-			// suc := new(auth.SignupController)
-			// vcc := new(auth.VerifyCodeController)
-			// lgc := new(auth.LoginController)
-
-			// // 判断手机是否已注册
-			// authGroup.POST("/signup/phone/exist", suc.IsPhoneExist)
-			// // 判断 Email 是否已注册
-			// authGroup.POST("/signup/email/exist", suc.IsEmailExist)
-			// // 图片验证码，需要加限流
-			// authGroup.POST("/verify-codes/captcha", vcc.ShowCaptcha)
-			// authGroup.POST("/verify-codes/phone", vcc.SendUsingPhone)
-			// authGroup.POST("/verify-codes/email", vcc.SendUsingEmail)
-			// authGroup.POST("/signup/using-phone", suc.SignupUsingPhone)
-			// authGroup.POST("/signup/using-email", suc.SignupUsingEmail)
-
-			// // 使用手机号，短信验证码进行登录
-			// authGroup.POST("/login/using-phone", lgc.LoginByPhone)
-			// // 支持手机号，Email 和 用户名
-			// authGroup.POST("/login/using-password", lgc.LoginByPassword)
-			// //刷新令牌
-			// authGroup.POST("/login/refresh-token", lgc.RefreshToken)
-
-			// // 重置密码
-			// pwc := new(auth.PasswordController)
-			// authGroup.POST("/password-reset/using-phone", pwc.ResetByPhone)
-			// authGroup.POST("/password-reset/using-email", pwc.ResetByEmail)
+			//Users
+			uc := new(controllers.UsersController)
+			// 获取当前用户
+			v1.GET("/user", middlewares.AuthJWT(), uc.CurrentUser)
 		}
 
 		// 注册一个路由
