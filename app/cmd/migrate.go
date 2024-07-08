@@ -8,7 +8,7 @@ import (
 )
 
 var CmdMigrate = &cobra.Command{
-	Use:   "up",
+	Use:   "migrate",
 	Short: "Run  database migration",
 	// 所有 migrate 下的子命令都会执行以下代码
 }
@@ -17,14 +17,54 @@ var CmdMigrateUp = &cobra.Command{
 	Short: "Run unmigrated migrations",
 	Run:   runUp,
 }
+var CmdMigrateRolleback = &cobra.Command{
+	Use: "down",
+	// 设置别名 migrate down == migrate rollback
+	Aliases: []string{"rollback"},
+	Short:   "Reverse the up command",
+	Run:     runDown,
+}
+var CmdMigratieFresh = &cobra.Command{
+	Use:   "fresh",
+	Short: "Drop all tables and re-run all migrations",
+	Run:   runFresh,
+}
+var CmdMigrateReset = &cobra.Command{
+	Use:   "reset",
+	Short: "Rollback all database migrations",
+	Run:   runReset,
+}
+
+func runReset(cmd *cobra.Command, args []string) {
+	migrator().Reset()
+}
+
+var CmdMigrateRefresh = &cobra.Command{
+	Use:   "refresh",
+	Short: "Reset and re-run all migrations",
+	Run:   runRefresh,
+}
+
+func runRefresh(cmd *cobra.Command, args []string) {
+	migrator().Refresh()
+}
+
+var CmdMigrateFresh = &cobra.Command{
+	Use:   "fresh",
+	Short: "Drop all tables and re-run all migrations",
+	Run:   runFresh,
+}
 
 func init() {
 	CmdMigrate.AddCommand(
 		CmdMigrateUp,
+		CmdMigrateRolleback,
+		CmdMigrateRefresh,
+		CmdMigrateReset,
+		CmdMigrateFresh,
 	)
 }
 func migrator() *migrate.Migrator {
-	// 注册 database/migrations 下的所有迁移文件
 	// 注册 database/migrations 下的所有迁移文件
 	migrations.Initialize()
 	// 初始化 migrator
@@ -32,4 +72,11 @@ func migrator() *migrate.Migrator {
 }
 func runUp(cmd *cobra.Command, args []string) {
 	migrator().Up()
+}
+
+func runDown(cmd *cobra.Command, args []string) {
+	migrator().Rollback()
+}
+func runFresh(cmd *cobra.Command, args []string) {
+	migrator().Fresh()
 }
