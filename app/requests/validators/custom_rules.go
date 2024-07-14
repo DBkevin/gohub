@@ -72,6 +72,7 @@ func init() {
 	})
 	// min_cn:2 中文长度设定不小于 2
 	govalidator.AddCustomRule("min_cn", func(field, rule, message string, value interface{}) error {
+
 		valLength := utf8.RuneCountInString(value.(string))
 		l, _ := strconv.Atoi(strings.TrimPrefix(rule, "min_cn:"))
 		if valLength < l {
@@ -80,6 +81,31 @@ func init() {
 				return errors.New(message)
 			}
 			return fmt.Errorf("长度需大于 %d 个字", l)
+		}
+		return nil
+	})
+	// 自定义规则 exists，确保数据库存在某条数据
+	// 一个使用场景是创建话题时需要附带 category_id 分类 ID 为参数，此时需要保证
+	// category_id 的值在数据库中存在，即可使用：
+	// exists:categories,id
+	govalidator.AddCustomRule("exists", func(field, rule, message string, value interface{}) error {
+		rng := strings.Split(strings.TrimPrefix(rule, "exists:"), ",")
+		// 第一个参数，表名称，如 categories
+		tableName := rng[0]
+		// 第二个参数，字段名称，如 id
+		dbFiled := rng[1]
+		// 用户请求过来的数据
+		requestValue := value.(string)
+		// 查询数据库
+		var count int64
+		database.DB.Table(tableName).Where(dbFiled+" = ?", requestValue).Count(&count)
+		// 验证不通过，数据不存在
+		if count == 0 {
+			// 如果有自定义错误消息的话，使用自定义消息
+			if message != "" {
+				return errors.New(message)
+			}
+			return fmt.Errorf("%v 不存在", requestValue)
 		}
 		return nil
 	})
