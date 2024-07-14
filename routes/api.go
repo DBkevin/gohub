@@ -56,6 +56,14 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			{
 				usersGroup.GET("", uc.Index)
 			}
+			cgc := new(controllers.CategoriesController)
+			cgcGroup := v1.Group("/categories")
+			{
+				cgcGroup.GET("", cgc.Index)
+				cgcGroup.DELETE("/:id", middlewares.AuthJWT(), cgc.Delete)
+				cgcGroup.POST("", middlewares.AuthJWT(), cgc.Store)
+				cgcGroup.PUT("/:id", middlewares.AuthJWT(), cgc.Update)
+			}
 		}
 
 		// 注册一个路由
