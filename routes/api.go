@@ -73,6 +73,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 				tpcGroup.GET("/", tpc.Index)
 				tpcGroup.GET("/:id", tpc.Show)
 			}
+			lcs := new(controllers.LinksController)
+			lcsGrop := v1.Group("/links")
+			{
+				lcsGrop.GET("", lcs.Index)
+			}
 		}
 
 		// 注册一个路由
