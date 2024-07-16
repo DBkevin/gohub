@@ -26,6 +26,8 @@ require (
 	gorm.io/gorm v1.25.10
 )
 
+require github.com/disintegration/imaging v1.6.2 // indirect
+
 require (
 	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/bytedance/sonic v1.11.6 // indirect

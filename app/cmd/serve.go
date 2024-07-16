@@ -5,6 +5,7 @@ import (
 	"gohub/pkg/config"
 	"gohub/pkg/console"
 	"gohub/pkg/logger"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -26,6 +27,9 @@ func runWeb(cmd *cobra.Command, args []string) {
 	gin.SetMode(gin.ReleaseMode)
 	// gin 实例
 	router := gin.New()
+	//路由返回文件
+
+	router.StaticFS("/uploads", http.Dir("./public/uploads"))
 	// 初始化路由绑定
 	bootstrap.SetupRoute(router)
 	// 运行服务器
